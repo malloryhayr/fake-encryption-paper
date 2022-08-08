@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "dev.igalaxy"
-version = "1.0.0"
+version = "1.0.1"
 description = "Hides the annoying \"Chat messages can't be verified\" popup on Vanilla clients even if chat encryption isn't forced "
 
 repositories {
