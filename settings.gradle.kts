@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "PaperKotlinStarter"
+rootProject.name = "fake-encryption-paper"

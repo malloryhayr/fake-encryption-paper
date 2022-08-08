@@ -9,19 +9,21 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
 }
 
-group = "net.satellyte"
+group = "dev.igalaxy"
 version = "1.0.0"
-description = "My Kotlin Paper Plugin"
+description = "Hides the annoying \"Chat messages can't be verified\" popup on Vanilla clients even if chat encryption isn't forced "
 
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.dmulloy2.net/repository/public/")
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     paperDevBundle("1.19.1-R0.1-SNAPSHOT")
     implementation("net.axay:kspigot:1.19.0")
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.0.0-SNAPSHOT")
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -44,9 +46,9 @@ tasks {
 }
 
 bukkit {
-    name = "Starter"
+    name = "FakeEncryption"
     description = description
-    main = "net.satellyte.starter.Starter"
+    main = "dev.igalaxy.fakeencryption.FakeEncryption"
     version = version
     apiVersion = "1.19"
 }
@@ -54,19 +56,8 @@ bukkit {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifactId = "starter"
+            artifactId = "fake-encryption"
             from(components["java"])
-        }
-    }
-    repositories {
-        maven {
-            val releasesRepoUrl = "https://repo.example.com/releases"
-            val snapshotsRepoUrl = "https://repo.example.com/snapshots"
-            url = uri(if (project.hasProperty("release")) releasesRepoUrl else snapshotsRepoUrl)
-            credentials {
-                username = System.getenv("MAVEN_REPO_USERNAME")
-                password = System.getenv("MAVEN_REPO_PASSWORD")
-            }
         }
     }
 }
