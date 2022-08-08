@@ -10,20 +10,20 @@ plugins {
 }
 
 group = "dev.igalaxy"
-version = "1.0.1"
+version = "1.1.0"
 description = "Hides the annoying \"Chat messages can't be verified\" popup on Vanilla clients even if chat encryption isn't forced "
 
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     paperDevBundle("1.19.1-R0.1-SNAPSHOT")
     implementation("net.axay:kspigot:1.19.0")
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.0.0-SNAPSHOT")
+    implementation("com.github.retrooper.packetevents:spigot:2.0.0-20220807.223642-28")
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -42,7 +42,12 @@ tasks {
         kotlinOptions.jvmTarget = "17"
     }
 
-    shadowJar { }
+    shadowJar {
+        minimize()
+        relocate("com.github.retrooper.packetevents", "dev.igalaxy.fakeencryption.lib.packetevents.api")
+        relocate("io.github.retrooper.packetevents", "dev.igalaxy.fakeencryption.lib.packetevents.impl")
+        relocate("net.kyori", "dev.igalaxy.fakeencryption.lib.packetevents.kyori")
+    }
 }
 
 bukkit {
@@ -51,6 +56,7 @@ bukkit {
     main = "dev.igalaxy.fakeencryption.FakeEncryption"
     version = version
     apiVersion = "1.19"
+    softDepend = listOf("ProtocolLib", "ProtocolSupport", "ViaVersion", "ViaBackwards", "ViaRewind", "Geyser-Spigot")
 }
 
 publishing {

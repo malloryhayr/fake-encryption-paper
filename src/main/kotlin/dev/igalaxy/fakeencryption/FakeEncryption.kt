@@ -1,10 +1,7 @@
 package dev.igalaxy.fakeencryption
 
-import com.comphenix.protocol.PacketType
-import com.comphenix.protocol.ProtocolLibrary
-import com.comphenix.protocol.events.ListenerPriority
-import com.comphenix.protocol.events.PacketAdapter
-import com.comphenix.protocol.events.PacketEvent
+import com.github.retrooper.packetevents.PacketEvents
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.axay.kspigot.main.KSpigot
 
 class FakeEncryption : KSpigot() {
@@ -14,19 +11,15 @@ class FakeEncryption : KSpigot() {
 
     override fun load() {
         INSTANCE = this
+
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(INSTANCE))
+        PacketEvents.getAPI().settings.debug(false).checkForUpdates(false)
+        PacketEvents.getAPI().load()
     }
 
     override fun startup() {
-        val protocolManager = ProtocolLibrary.getProtocolManager()!!
-        protocolManager.addPacketListener(object : PacketAdapter(
-            INSTANCE,
-            ListenerPriority.NORMAL,
-            PacketType.Play.Server.SERVER_DATA
-        ) {
-            override fun onPacketSending(event: PacketEvent?) {
-                event?.packet?.booleans?.write(3, false)
-            }
-        })
+        PacketEvents.getAPI().eventManager.registerListener(FakeEncryptionListener())
+        PacketEvents.getAPI().init()
     }
 
     override fun shutdown() { }
